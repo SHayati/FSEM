@@ -1,0 +1,11 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.positai
+
+# Ignore outputs and data files
+outputs/
+*.rds
+*.RData
+

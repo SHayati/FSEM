@@ -676,12 +676,19 @@ simulation<-function(model,n.sample,n.t,n.b.sim=100,n.b,r=0.5,rho=0.1,SNR=1,
     for (i in 1:length(model$var$observed)) {
       nx<-n.sample
       cov<-model$var$observedScalar$observed[i]
+      cov.overwrite.later = FALSE
+      if(is.na(model$var$observedScalar$scalar[i])&& cov%in%model$var$latents)
+        model$var$observedScalar$scalar[i] = FALSE
+      
+      if(cov%in%model$var$latents) cov.overwrite.later = TRUE
+         
       if(model$var$observedScalar$scalar[i]==TRUE){
         x.data[[cov]]<-x.generator[[cov]]  
       }else{
         x.data[[cov]]<-list()
+        attr(x.data[[cov]], "cov.overwrite.later") = cov.overwrite.later
         for (ii in 1:nx) {
-          x.data[[cov]][[ii]]<-x.generator[[cov]][ii]*tt
+          x.data[[cov]][[ii]]<-x.generator[[cov]][ii]*tt ##Will be overwritten if it is a latent variable
         }
       }
     }

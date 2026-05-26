@@ -1,6 +1,7 @@
 
 #initial libraries
-source("realData/realDataSEFF.R")
+# source("realData/realDataSEFF.R")
+source("realData/realDataSEFF_fixed.R")
 source("realData/covRate.R")
 
 t<-seq(2008,2022,length.out=200)
