@@ -1,0 +1,26 @@
+
+=========================================
+Scenario: eta1 ~ eta2 with effect =fixed
+=========================================
+  replicate1/2... FIT ERROR:subscript out of bounds
+done in 47.1s (sim_ok=TRUE, fit_ok=FALSE)
+  replicate2/2... FIT ERROR:subscript out of bounds
+done in 44.5s (sim_ok=TRUE, fit_ok=FALSE)
+
+=========================================
+Scenario: eta1 ~ eta2 with effect =concurrent
+=========================================
+  replicate1/2... done in 190.2s (sim_ok=TRUE, fit_ok=TRUE)
+  replicate2/2... done in 190.5s (sim_ok=TRUE, fit_ok=TRUE)
+
+=========================================
+Scenario: eta1 ~ eta2 with effect =historical
+=========================================
+  replicate1/2... done in 231.0s (sim_ok=TRUE, fit_ok=TRUE)
+  replicate2/2... done in 245.8s (sim_ok=TRUE, fit_ok=TRUE)
+
+
+========= TEST SUMMARY =========
+  effect=fixed        ok=0/2  total=91.7s
+  effect=concurrent   ok=2/2  total=380.7s
+  effect=historical   ok=2/2  total=476.8s

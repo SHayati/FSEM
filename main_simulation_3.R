@@ -30,8 +30,18 @@ for (j in 1:nrow(comb)) {
       fsem(eta1~-1+eta2,effectType="fixed",scalar.covariate = FALSE) %+% 
       fsem(eta2~~z4+z5+z6,effectType="concurrent")%+%
       fsem(eta2~-1)
-    
-    model.fit<-fsem(eta1~~z1,effectType="fixed_concurrent")%+%
+
+   #well specified model.  
+    model.fit1<-fsem(eta1~~z1,effectType="fixed_concurrent")%+%
+      fsem(eta1~~z2,effectType="concurrent")%+%
+      fsem(eta1~~z3,effectType="historical")%+%
+      fsem(eta1~-1+eta2, effectType="fixed")%+%
+      fsem(eta2~~z4,effectType="fixed_concurrent")%+%
+      fsem(eta2~~z5+z6,effectType="concurrent")%+%
+      fsem(eta2~-1)
+
+#misspecification: omitting the dependency between eta1 and eta2
+      model.fit2<-fsem(eta1~~z1,effectType="fixed_concurrent")%+%
       fsem(eta1~~z2,effectType="concurrent")%+%
       fsem(eta1~~z3,effectType="historical")%+%
       fsem(eta1~-1)%+%

@@ -220,7 +220,7 @@ diag.matrix<-function(model,n.b){
       if(length(model$var$observed)>0){
         a1<-model$var$observed%in%model$mod$regression[[j]]$covariate
         for (k in 1:length(a1)) {
-          if(a1[k]&model$mod$regression[[j]]$effect[which(model$mod$regression[[j]]$covariate==model$var$observed[k])]=="linear"){
+          if(a1[k] && model$mod$regression[[j]]$effect[which(model$mod$regression[[j]]$covariate==model$var$observed[k])]=="linear"){
             d1<-Matrix::bdiag(d1,a1[k])  
           }else{
             d1<-Matrix::bdiag(d1,a1[k]*diag(n.b))

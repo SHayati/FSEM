@@ -317,7 +317,7 @@ parameter1<-function(model,r,rho,n.b.sim,SNR,Matern.fac=FALSE,Matern.sem=FALSE,r
                   p[["regression"]][[paste0("r",i)]][["coefficient"]][[j]]<-isolate.fun(function(s,t){1+1/2*sin(pi*(s+t)*sqrt(lat.clount)*j/m)},list(lat.clount=lat.clount,j=j,m=m))
                 }
                 if(model[["mod"]][["regression"]][[paste0("r",i)]]$effect[j]=="fixed"){
-                  p[["regression"]][[paste0("r",i)]][["coefficient"]][[j]]<-NULL
+                  p[["regression"]][[paste0("r",i)]][["coefficient"]][[j]]<-0.7
                 }
               }else{
                 if(!(is.null(model[["mod"]][["regression"]][[paste0("r",i)]]$effect[j]))){
@@ -435,7 +435,7 @@ parameter2<-function(model,r,rho,n.b.sim,SNR,Matern.fac=FALSE,Matern.sem=FALSE,r
                   p[["regression"]][[paste0("r",i)]][["coefficient"]][[j]]<-isolate.fun(function(s,t){1+1/2*sin(pi*(s+t)*sqrt(lat.clount)*j/m)},list(lat.clount=lat.clount,j=j,m=m))
                 }
                 if(model[["mod"]][["regression"]][[paste0("r",i)]]$effect[j]=="fixed"){
-                  p[["regression"]][[paste0("r",i)]][["coefficient"]][[j]]<-NULL
+                  p[["regression"]][[paste0("r",i)]][["coefficient"]][[j]]<-0.7
                 }
               }else{
                 if(!(is.null(model[["mod"]][["regression"]][[paste0("r",i)]]$effect[j]))){
@@ -551,7 +551,7 @@ parameter3<-function(model,r,rho,n.b.sim,SNR,Matern.fac=FALSE,Matern.sem=FALSE,r
                   p[["regression"]][[paste0("r",i)]][["coefficient"]][[j]]<-isolate.fun(function(s,t){1+1/2*sin(pi*(s+t)*sqrt(i)*j/m)},list(i=i,j=j,m=m))
                 }
                 if(model[["mod"]][["regression"]][[paste0("r",i)]]$effect[j]=="fixed"){
-                  p[["regression"]][[paste0("r",i)]][["coefficient"]][[j]]<-NULL
+                  p[["regression"]][[paste0("r",i)]][["coefficient"]][[j]]<-0.7
                 }
               }else{
                 if(!(is.null(model[["mod"]][["regression"]][[paste0("r",i)]]$effect[j]))){
@@ -759,8 +759,11 @@ simulation<-function(model,n.sample,n.t,n.b.sim=100,n.b,r=0.5,rho=0.1,SNR=1,
             }
           }else{
             ww<-which(names(r)==model$mod$regression[[kk]][["covariate"]][j])
-            if(model$mod$regression[[kk]][["effect"]][j]=="fixed")
-              mx<-r[[ww]]
+            if(model$mod$regression[[kk]][["effect"]][j]=="fixed"){
+              alpha_scalar <- parameters$regression[[kk]][["coefficient"]][[j]]
+              if(is.null(alpha_scalar) || !is.numeric(alpha_scalar)) alpha_scalar <- 1
+              mx <- lapply(r[[ww]], function(x) alpha_scalar * x)
+            }
             
             if(model$mod$regression[[kk]][["effect"]][j]=="concurrent")
               for (j1 in 1:nx) {
@@ -771,7 +774,7 @@ simulation<-function(model,n.sample,n.t,n.b.sim=100,n.b,r=0.5,rho=0.1,SNR=1,
             if(model$mod$regression[[kk]][["effect"]][j]=="historical"){
               for (j1 in 1:nx) {
                 et.coef<-solve(eval%*%t(eval))%*%eval%*%r[[ww]][[j1]]
-                hist<-sapply(tt,function(t){ind1=seq(range.min,t,length.out=n.Rimanian);evv<-t(eval.basis(ind1,basis));sum(sapply(1:length(ind1),function(s){1/Nr*parameters$factorModel[[k]][["coefficient"]][[j]](ind1[s],t)*(t(evv)[s,]%*%et.coef)}))})
+                hist<-sapply(tt,function(t){ind1=seq(range.min,t,length.out=n.Rimanian);evv<-t(eval.basis(ind1,basis));sum(sapply(1:length(ind1),function(s){1/Nr*parameters$regression[[kk]][["coefficient"]][[j]](ind1[s],t)*(t(evv)[s,]%*%et.coef)}))})
                 mx[[j1]]<-hist 
               }
             }}
