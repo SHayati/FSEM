@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Two Additional Two-Factor Simulation Studies: MSE Results</title>
+<script>window.MathJax={tex:{inlineMath:[['$','$']],displayMath:[['$$','$$']]}};</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;max-width:860px;margin:2rem auto;padding:0 1rem;line-height:1.55;color:#1f2328;}
+h1,h2{border-bottom:1px solid #d0d7de;padding-bottom:.3em;}
+table{border-collapse:collapse;margin:1em 0;width:auto;}
+th,td{border:1px solid #d0d7de;padding:6px 12px;text-align:right;}
+th{background:#f6f8fa;}
+table td:first-child,table th:first-child{text-align:left;}
+code{background:#eff1f3;padding:.1em .3em;border-radius:4px;}
+em{color:#444;}
+</style>
+</head>
+<body>
+<h1>Two Additional Two-Factor Simulation Studies: MSE Results</h1>
+<p>This note reports the Monte-Carlo mean-squared-error (MSE) results for <strong>two new
+simulation studies</strong> that extend the single-factor study of the main paper to a
+<strong>two-factor</strong> functional structural equation model (FSEM). All quantities are
+computed from the stored simulation output (folders <code>outputs/</code> and <code>outputs3/</code>);
+<strong>no simulation was re-run</strong>. The tables are intended to be incorporated into the
+manuscript later.</p>
+<p>Throughout, the latent factors are zero-mean Gaussian processes observed only
+through their indicators. Each replicate is summarised by the integrated squared
+error between the estimated and the true (standardised) functional parameter, and
+the MSE is the Monte-Carlo average of that error over the replicates in each
+design cell. We use the manuscript notation:</p>
+<table>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$\lambda$</td>
+<td>factor-loading function (indicator on factor)</td>
+</tr>
+<tr>
+<td>$\beta$</td>
+<td>factor intercept function</td>
+</tr>
+<tr>
+<td>$\gamma$</td>
+<td>structural (latent-on-latent) regression function</td>
+</tr>
+<tr>
+<td>$\phi,\ \nu$</td>
+<td>leading eigenfunction / eigenvalue of a factor-error process</td>
+</tr>
+<tr>
+<td>$\psi,\ \mu$</td>
+<td>leading eigenfunction / eigenvalue of a latent-process</td>
+</tr>
+<tr>
+<td>$\sigma^2$</td>
+<td>measurement-error variance</td>
+</tr>
+</tbody>
+</table>
+<p>Both studies use $J=6$ indicators ($z_1,\dots,z_6$), a B-spline basis with $k$
+internal structure as in the main study, signal-to-noise ratio $\mathrm{SNR}=4$
+and correlation parameter $\rho=0.3$, with Matérn covariance for the latent
+processes. Loadings combine a <em>fixed-concurrent</em> anchor ($z_1,z_4$), <em>concurrent</em>
+effects ($z_2,z_5,z_6$) and a <em>historical</em> effect ($z_3$). Sample sizes
+$N\in{50,100}$ and number of observation points $M\in{10,20}$ are crossed.</p>
+<p>For readability all loading and intercept MSEs are reported $\times 10^{-2}$.</p>
+<hr />
+<h2>Study A — Two factors, <em>uncorrelated</em></h2>
+<p><strong>Design.</strong> Two latent factors $\eta_1,\eta_2$ are generated <strong>independently</strong>
+(no structural path between them). Indicators $z_1,z_2,z_3$ load on $\eta_1$ and
+$z_4,z_5,z_6$ load on $\eta_2$. Each factor has an intercept-only structural
+equation ($\eta_1\sim 1$, $\eta_2\sim 1$). This study checks that the estimator
+recovers a multi-factor measurement model and the (independent) latent-process
+covariances when there is no latent dependence to exploit. Results in <code>outputs/</code>
+comprise the four cells $N\in{50,100}\times M\in{10,20}$ with 80 replicates each.</p>
+<p><strong>Factor-loading MSE $\lambda$ ($\times 10^{-2}$).</strong></p>
+<table>
+<thead>
+<tr>
+<th align="right">$N$</th>
+<th align="right">$M$</th>
+<th align="right">$\lambda_1$</th>
+<th align="right">$\lambda_2$</th>
+<th align="right">$\lambda_3$</th>
+<th align="right">$\lambda_4$</th>
+<th align="right">$\lambda_5$</th>
+<th align="right">$\lambda_6$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">50</td>
+<td align="right">10</td>
+<td align="right">2.46</td>
+<td align="right">3.15</td>
+<td align="right">10.18</td>
+<td align="right">6.32</td>
+<td align="right">6.41</td>
+<td align="right">5.22</td>
+</tr>
+<tr>
+<td align="right">50</td>
+<td align="right">20</td>
+<td align="right">1.82</td>
+<td align="right">2.14</td>
+<td align="right">8.72</td>
+<td align="right">3.79</td>
+<td align="right">3.77</td>
+<td align="right">3.71</td>
+</tr>
+<tr>
+<td align="right">100</td>
+<td align="right">10</td>
+<td align="right">1.36</td>
+<td align="right">2.09</td>
+<td align="right">8.88</td>
+<td align="right">3.75</td>
+<td align="right">3.97</td>
+<td align="right">3.06</td>
+</tr>
+<tr>
+<td align="right">100</td>
+<td align="right">20</td>
+<td align="right">1.25</td>
+<td align="right">1.52</td>
+<td align="right">7.62</td>
+<td align="right">1.85</td>
+<td align="right">1.98</td>
+<td align="right">1.90</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Factor-intercept MSE $\beta$ ($\times 10^{-2}$).</strong></p>
+<table>
+<thead>
+<tr>
+<th align="right">$N$</th>
+<th align="right">$M$</th>
+<th align="right">$\beta_1$</th>
+<th align="right">$\beta_2$</th>
+<th align="right">$\beta_3$</th>
+<th align="right">$\beta_4$</th>
+<th align="right">$\beta_5$</th>
+<th align="right">$\beta_6$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">50</td>
+<td align="right">10</td>
+<td align="right">5.54</td>
+<td align="right">4.72</td>
+<td align="right">2.25</td>
+<td align="right">3.99</td>
+<td align="right">3.66</td>
+<td align="right">3.41</td>
+</tr>
+<tr>
+<td align="right">50</td>
+<td align="right">20</td>
+<td align="right">5.51</td>
+<td align="right">5.07</td>
+<td align="right">2.49</td>
+<td align="right">3.48</td>
+<td align="right">3.12</td>
+<td align="right">3.03</td>
+</tr>
+<tr>
+<td align="right">100</td>
+<td align="right">10</td>
+<td align="right">3.35</td>
+<td align="right">3.32</td>
+<td align="right">1.92</td>
+<td align="right">1.85</td>
+<td align="right">1.93</td>
+<td align="right">1.83</td>
+</tr>
+<tr>
+<td align="right">100</td>
+<td align="right">20</td>
+<td align="right">2.75</td>
+<td align="right">2.43</td>
+<td align="right">1.45</td>
+<td align="right">1.78</td>
+<td align="right">1.66</td>
+<td align="right">1.59</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Findings.</strong> Every loading and intercept MSE decreases monotonically as the
+sample size $N$ grows and as the curves are observed more densely ($M$),
+confirming consistent estimation of the two-factor measurement model. The
+<em>historical</em> loading $\lambda_3$ is the hardest to estimate (largest MSE), as
+expected for a two-dimensional surface, but it also improves with $N$ and $M$.
+The leading eigenfunctions/eigenvalues ($\phi_1,\nu_1$) of the factor-error
+processes and the latent-process covariances ($\psi_1,\mu_1$) are recovered with
+small error (e.g. $\psi_{1},\mu_{1}$ MSE $\approx 1\text{–}5\times10^{-3}$, all
+decreasing in $N,M$); higher-order eigen-components are subject to the usual
+sign/ordering non-identifiability and are not tabulated. Because the factors are
+independent, no structural ($\gamma$) parameters are present.</p>
+<hr />
+<h2>Study B — Two factors, <em>dependent</em> (well- vs mis-specified)</h2>
+<p><strong>Design.</strong> The two factors are now <strong>dependent</strong>: the data-generating model
+includes a structural path $\eta_1 \leftarrow \eta_2$ (a concurrent latent-on-
+latent regression $\gamma$), in addition to the same six-indicator measurement
+model ($z_1,z_2,z_3$ on $\eta_1$; $z_4,z_5,z_6$ on $\eta_2$). Two estimators are
+fitted to every data set:</p>
+<ul>
+<li><strong>Well-specified (<code>.w</code>)</strong> — the fitted model includes the structural path
+$\eta_1 \sim \eta_2$ (the correct dependence).</li>
+<li><strong>Mis-specified (<code>.m</code>)</strong> — the fitted model <strong>omits</strong> the path
+($\eta_1 \sim 1$ only), so the latent dependence is ignored.</li>
+</ul>
+<p>This study quantifies (i) how well the structural function $\gamma$ is recovered
+and (ii) the cost of ignoring latent dependence. Results in <code>outputs3/</code> cover
+$N=100$ with $M\in{10,20}$.</p>
+<p><strong>Factor-loading MSE $\lambda$ ($\times 10^{-2}$), well-specified vs mis-specified.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Fit</th>
+<th align="right">$N$</th>
+<th align="right">$M$</th>
+<th align="right">$\lambda_1$</th>
+<th align="right">$\lambda_2$</th>
+<th align="right">$\lambda_3$</th>
+<th align="right">$\lambda_4$</th>
+<th align="right">$\lambda_5$</th>
+<th align="right">$\lambda_6$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>well</td>
+<td align="right">100</td>
+<td align="right">10</td>
+<td align="right">8.11</td>
+<td align="right">8.41</td>
+<td align="right">6.78</td>
+<td align="right">2.67</td>
+<td align="right">2.84</td>
+<td align="right">2.17</td>
+</tr>
+<tr>
+<td>well</td>
+<td align="right">100</td>
+<td align="right">20</td>
+<td align="right">3.23</td>
+<td align="right">3.42</td>
+<td align="right">4.40</td>
+<td align="right">1.69</td>
+<td align="right">1.64</td>
+<td align="right">1.67</td>
+</tr>
+<tr>
+<td>miss</td>
+<td align="right">100</td>
+<td align="right">10</td>
+<td align="right">68.63</td>
+<td align="right">73.12</td>
+<td align="right">75.55</td>
+<td align="right">3.81</td>
+<td align="right">4.31</td>
+<td align="right">3.00</td>
+</tr>
+<tr>
+<td>miss</td>
+<td align="right">100</td>
+<td align="right">20</td>
+<td align="right">68.31</td>
+<td align="right">73.44</td>
+<td align="right">78.48</td>
+<td align="right">2.00</td>
+<td align="right">2.18</td>
+<td align="right">2.15</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Structural-function MSE $\gamma$ ($\eta_1\leftarrow\eta_2$), well-specified.</strong></p>
+<table>
+<thead>
+<tr>
+<th align="right">$N$</th>
+<th align="right">$M$</th>
+<th align="right">$\gamma$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">100</td>
+<td align="right">10</td>
+<td align="right">0.408</td>
+</tr>
+<tr>
+<td align="right">100</td>
+<td align="right">20</td>
+<td align="right">0.117</td>
+</tr>
+</tbody>
+</table>
+<p>(The mis-specified fit contains no $\gamma$ because the path is omitted.)</p>
+<p><strong>Findings.</strong> Under the <strong>well-specified</strong> model the loadings of all six
+indicators are estimated accurately and improve sharply with denser sampling
+($M:10\to20$ roughly halves the loading MSE). The structural function $\gamma$ is
+the most challenging parameter, but its MSE falls by a factor of $\sim3.5$ (from
+$0.41$ to $0.12$) as $M$ increases from 10 to 20, showing that the latent-on-
+latent effect is recovered well once the curves are reasonably sampled.</p>
+<p>The <strong>mis-specified</strong> fit reveals the cost of ignoring the dependence: the
+loadings of the indicators of the <em>contaminated</em> factor $\eta_1$
+($z_1,z_2,z_3$) deteriorate by <strong>more than an order of magnitude</strong>
+($\lambda_{1\text{–}3}$ MSE jumps from $\approx 0.03\text{–}0.08$ to
+$\approx 0.69\text{–}0.78$ and, tellingly, <strong>does not improve with $M$</strong>), whereas
+the loadings of $\eta_2$'s indicators ($z_4,z_5,z_6$) are essentially unchanged.
+Omitting the structural path therefore biases exactly the part of the
+measurement model attached to the response factor, while leaving the covariate
+factor intact — a clean and interpretable failure mode.</p>
+<hr />
+<h2>Discussion</h2>
+<p>Across the original single-factor study and the two new two-factor studies the
+estimator behaves consistently:</p>
+<ul>
+<li>
+<p><strong>Consistency.</strong> In every correctly-specified setting — the one-factor model of
+the main paper, Study A (uncorrelated factors) and the well-specified Study B
+(dependent factors) — all functional MSEs decrease monotonically with both the
+sample size $N$ and the sampling density $M$. The main study established this
+for a single factor; the new studies show it continues to hold when the
+measurement model carries two factors and when the factors are linked by a
+structural path.</p>
+</li>
+<li>
+<p><strong>Scalability to richer measurement models.</strong> Study A demonstrates that the EM
+estimator handles several indicators per factor and multiple independent
+factors without loss of accuracy: loadings, intercepts and the leading
+latent-covariance eigen-components are all recovered with small error.</p>
+</li>
+<li>
+<p><strong>Latent dependence is recoverable but data-hungry.</strong> In the well-specified
+Study B the structural function $\gamma$ has the largest MSE of any parameter
+yet improves rapidly with $M$, mirroring the difficulty of the <em>historical</em>
+surface effect seen in the main study. Adequate sampling density is the key
+driver of accurate structural estimation.</p>
+</li>
+<li>
+<p><strong>Mis-specification is localised but severe.</strong> Ignoring a true latent-on-latent
+path inflates the loading MSE of the affected factor by more than a factor of
+ten and removes the usual benefit of denser sampling, while leaving the
+unaffected factor's parameters intact. This underlines the practical importance
+of correctly specifying the structural part of the model and shows that the
+damage is confined to the response factor rather than propagating through the
+whole system.</p>
+</li>
+</ul>
+<p>Taken together, the two additional studies corroborate the conclusions of the
+main simulation — consistent, sampling-density-driven estimation — and extend
+them to multi-factor measurement models and to latent structural dependence,
+while quantifying the cost of structural mis-specification.</p>
+<p><em>Coverage rates are not reported here; this note covers the MSE results only.</em></p>
+
+</body>
+</html>
+

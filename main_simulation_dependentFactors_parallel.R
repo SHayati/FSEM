@@ -156,9 +156,37 @@ stopCluster(cl)
 if(!dir.exists("outputs3"))dir.create("outputs3")
 saveRDS(results, file.path("outputs3","results3.rds"), compress = FALSE)
 
-#extracting MSE values
-# source("Core/MSE_report.R")
-# print(tabl.fac)
-# print(tabl.sem)
+#extracting MSE values (two-factor model, DEPENDENT factors)
+# The fitted models are only created inside the worker loop, so rebuild them here
+# for the MSE summary.  The generalised streaming engine lives at the bottom of
+# Core/MSE_tab3.R; FSEM_MSE_DEFINE_ONLY loads the helper functions only.
+FSEM_MSE_DEFINE_ONLY <- TRUE
+source("Core/MSE_tab3.R")
+
+model.fit.m <- fsem(eta1~~z1, effectType="fixed_concurrent")      %+%
+  fsem(eta1~~z2, effectType="concurrent")                        %+%
+  fsem(eta1~~z3, effectType="historical")                        %+%
+  fsem(eta2~~z4, effectType="fixed_concurrent")                  %+%
+  fsem(eta2~~z5+z6, effectType="concurrent")                     %+%
+  fsem(eta1~-1, effectType="concurrent")                         %+%
+  fsem(eta2~-1)
+model.fit.w <- fsem(eta1~~z1, effectType="fixed_concurrent")      %+%
+  fsem(eta1~~z2, effectType="concurrent")                        %+%
+  fsem(eta1~~z3, effectType="historical")                        %+%
+  fsem(eta2~~z4, effectType="fixed_concurrent")                  %+%
+  fsem(eta2~~z5+z6, effectType="concurrent")                     %+%
+  fsem(eta1~-1+eta2, effectType="concurrent", latent.covariate="eta2", scalar.covariate=FALSE) %+%
+  fsem(eta2~-1)
+
+mse.well <- fsem_mse_from_list(results, fit_key = "model.fit.w",
+                               est_key = "estimation.w", fit_model = model.fit.w)
+mse.miss <- fsem_mse_from_list(results, fit_key = "model.fit.m",
+                               est_key = "estimation.m", fit_model = model.fit.m)
+write.csv(mse.well$tabl.fac, file.path("outputs3","MSE_dep_well_fac.csv"), row.names = FALSE)
+write.csv(mse.well$tabl.sem, file.path("outputs3","MSE_dep_well_sem.csv"), row.names = FALSE)
+write.csv(mse.miss$tabl.fac, file.path("outputs3","MSE_dep_miss_fac.csv"), row.names = FALSE)
+write.csv(mse.miss$tabl.sem, file.path("outputs3","MSE_dep_miss_sem.csv"), row.names = FALSE)
+print(mse.well$tabl.fac); print(mse.well$tabl.sem)
+print(mse.miss$tabl.fac); print(mse.miss$tabl.sem)
 
 

@@ -106,8 +106,17 @@ stopCluster(cl)
 if(!dir.exists("outputs"))dir.create("outputs")
 saveRDS(results, file.path("outputs","results.rds"), compress = FALSE)
 
-#extracting MSE values
-source("Core/MSE_report.R")
+#extracting MSE values (two-factor model, UNCORRELATED factors)
+# The generalised streaming engine lives at the bottom of Core/MSE_tab3.R.
+# FSEM_MSE_DEFINE_ONLY skips the original one-factor procedural block and only
+# loads the helper functions.
+FSEM_MSE_DEFINE_ONLY <- TRUE
+source("Core/MSE_tab3.R")
+mse.uncor <- fsem_mse_from_list(results, fit_key = "model.fit", est_key = "estimation")
+tabl.fac <- mse.uncor$tabl.fac
+tabl.sem <- mse.uncor$tabl.sem
+write.csv(tabl.fac, file.path("outputs","MSE_uncor_fac.csv"), row.names = FALSE)
+write.csv(tabl.sem, file.path("outputs","MSE_uncor_sem.csv"), row.names = FALSE)
 print(tabl.fac)
 print(tabl.sem)
 
