@@ -107,7 +107,7 @@ if(!dir.exists("outputs"))dir.create("outputs")
 saveRDS(results, file.path("outputs","results.rds"), compress = FALSE)
 
 #extracting MSE values
-source("Core/MSE_tab1_fixed.R")
+source("Core/MSE_report.R")
 print(tabl.fac)
 print(tabl.sem)
 

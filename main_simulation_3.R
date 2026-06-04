@@ -56,14 +56,23 @@ for (j in 1:nrow(comb)) {
     # single_run = list(sim.data=simm,params.estimated.well.specified=params.estimated.w, params.estimated.misspecified = params.estimated.m)
     # saveRDS(single_run, "single_run_results.rds")
     
-    results[[count]]<-list(simulation=simm,model.fit=model.fit,model.sim=model.sim,estimation=params.estimated)
+    results[[count]]<-list(
+      simulation = simm,
+      model.fit.w = model.fit.w,
+      model.fit.m = model.fit.m,
+      model.sim = model.sim,
+      estimation.w = params.estimated.w,
+      estimation.m = params.estimated.m
+    )
   }  
 }
 
 
 #extracting MSE values
-source("Core/MSE_tab1.R")
-print(tabl.fac)
-print(tabl.sem)
+source("Core/MSE_report.R")
+print(tabl.fac.w)
+print(tabl.sem.w)
+print(tabl.fac.m)
+print(tabl.sem.m)
 
 
