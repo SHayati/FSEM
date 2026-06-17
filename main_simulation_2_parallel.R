@@ -88,9 +88,9 @@ for (j in 1:nrow(comb)) {
     res<-list(simulation=simm,model.fit=model.fit,model.sim=model.sim,estimation=params.estimated)
     
     file_name = paste0("result_",i,"_N_",N,"_M_",M,".rds")
-    if(!dir.exists("outputs"))dir.create("outputs")
+    if(!dir.exists("outputs2"))dir.create("outputs2")
     
-    saveRDS(res, file.path("outputs",file_name), compress = FALSE)
+    saveRDS(res, file.path("outputs2",file_name), compress = FALSE)
     res
   }
   
@@ -103,8 +103,8 @@ for (j in 1:nrow(comb)) {
 }
 
 stopCluster(cl)
-if(!dir.exists("outputs"))dir.create("outputs")
-saveRDS(results, file.path("outputs","results.rds"), compress = FALSE)
+if(!dir.exists("outputs2"))dir.create("outputs2")
+saveRDS(results, file.path("outputs2","results.rds"), compress = FALSE)
 
 #extracting MSE values (two-factor model, UNCORRELATED factors)
 # The generalised streaming engine lives at the bottom of Core/MSE_tab3.R.
@@ -115,8 +115,8 @@ source("Core/MSE_tab3.R")
 mse.uncor <- fsem_mse_from_list(results, fit_key = "model.fit", est_key = "estimation")
 tabl.fac <- mse.uncor$tabl.fac
 tabl.sem <- mse.uncor$tabl.sem
-write.csv(tabl.fac, file.path("outputs","MSE_uncor_fac.csv"), row.names = FALSE)
-write.csv(tabl.sem, file.path("outputs","MSE_uncor_sem.csv"), row.names = FALSE)
+write.csv(tabl.fac, file.path("outputs2","MSE_uncor_fac.csv"), row.names = FALSE)
+write.csv(tabl.sem, file.path("outputs2","MSE_uncor_sem.csv"), row.names = FALSE)
 print(tabl.fac)
 print(tabl.sem)
 

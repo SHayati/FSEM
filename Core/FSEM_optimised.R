@@ -242,7 +242,7 @@ em.estimation.optimised <- function(model, data, x.data = NULL,
       w.tot <- data$.value[data$.id == samp]
       paramz <- params.z(model, param = paramz1, n.b = n.b,
                          range.min = range.min, range.max = range.max,
-                         sample.no = i1, w = w.tot, data)
+                         sample.no = i1, w = w.tot, data, eval.t = eval.t)
       paramz11 <- list()
       for (j1 in 1:no.fac) {
         generators2.z[[paste0(samp)]][[j1]] <- list()
@@ -514,6 +514,13 @@ em.estimation.optimised <- function(model, data, x.data = NULL,
     soll <- ginv(evall2 %*% t(evall2)) %*% evall2
     hist.sem <- list()
     for (j in 1:no.reg) {
+      ## Reset cross-iteration flags: et.ex/x.ex are set (via <-) only when a
+      ## regression has no latent / no observed covariate. Because exists()
+      ## checks the whole function scope, a stale flag from a previous
+      ## regression would wrongly strip a design column in cbind() and make the
+      ## design Gram matrix non-conformable with pen.sem. Clear them each pass.
+      if (exists("et.ex")) rm(et.ex)
+      if (exists("x.ex"))  rm(x.ex)
       co <- model$mod$regression[[j]]$covariate
       no.cov <- length(co)
       lat.count <- which(lat2 == model$mod$regression[[j]]$response)

@@ -4,5 +4,8 @@
 .Ruserdata
 .positai
 outputs/
+outputs3/
 *.RData
 *.rds
+manuscript/
+realData/

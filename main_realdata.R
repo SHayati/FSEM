@@ -9,6 +9,18 @@ par(mfrow=c(1,1))
 res<-results
 params.estimated.se<-res  
 
+#Figure 2
+##tolerances plots
+par(mgp = c(0, 2, 0))
+plot(1:length(params.estimated.se$tolerance$tol_sig[-1]),params.estimated.se$tolerance$tol_sig[-1],"l",
+     #ylab=expression(tol[sigma^2]),
+     ylab="",xlab="",cex.axis=3,cex.lab=3,lwd=3,family="serif")
+
+par(mgp = c(0, 2, 0))
+plot(1:length(params.estimated.se$tolerance$tol[-1]),params.estimated.se$tolerance$tol[-1],"l",
+     #ylab=expression(tol[coef]),
+     ylab="",xlab="",cex.axis=3,cex.lab=3,lwd=3,family="serif")
+
 #Figure 3
 ##factor loadings
 par(mgp = c(0, 2, 0))
@@ -42,19 +54,8 @@ plot(tt,-fregion.bands.fac[[1]][[5]][,1],col="blue","l", ylim=c(-0.5,0.5),
      ylab="",cex.axis=3,cex.lab=3,lwd=3,family="serif")
 polygon(c(tt, rev(tt)), c(-fregion.bands.fac[[1]][[5]][,3] , rev(-fregion.bands.fac[[1]][[5]][,2])), col=rgb(0.1 , 0.1 , 1 , alpha=0.1), border=NA)
 
+
 #Figure 4
-##tolerances plots
-par(mgp = c(0, 2, 0))
-plot(1:length(params.estimated.se$tolerance$tol_sig[-1]),params.estimated.se$tolerance$tol_sig[-1],"l",
-     #ylab=expression(tol[sigma^2]),
-     ylab="",xlab="",cex.axis=3,cex.lab=3,lwd=3,family="serif")
-
-par(mgp = c(0, 2, 0))
-plot(1:length(params.estimated.se$tolerance$tol[-1]),params.estimated.se$tolerance$tol[-1],"l",
-     #ylab=expression(tol[coef]),
-     ylab="",xlab="",cex.axis=3,cex.lab=3,lwd=3,family="serif")
-
-#Figure 5
 ##regression coefficients
 par(mgp = c(0, 2, 0))
 plot(tt,-fregion.bands.sem[[1]][[1]][[1]][,1],col="blue","l",ylim=c(-2.5,1.5),

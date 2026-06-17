@@ -5,17 +5,22 @@ timeEval<-function(n.b,range.min,range.max,data){
   no.f<-length(unique(data$.ind))
   m<-list()
   M<-list()
-  for (i in 1:samples) {
-    M[[i]]<-list()
-    M[[i]]<-sapply(1:no.f,function(j){length(unique(data$.t[data$.id==i&data$.ind==j]))}) 
-  }
+  basis<-create.bspline.basis(nbasis=n.b,rangeval = c(range.min,range.max))
+  ## Split the time points by (.id,.ind) ONCE (O(total observations)) instead
+  ## of re-scanning the full .t vector with `data$.id==i & data$.ind==j` inside
+  ## an O(samples*no.f) loop (which is O(N^2) in the number of subjects and was
+  ## the dominant cost when timeEval is called repeatedly).  The within-group
+  ## order follows the original row order, so unique() yields identical results.
+  grp <- split(data$.t, list(data$.id, data$.ind), drop = FALSE, sep = "\r")
+  tp <- function(i, j) { v <- grp[[paste0(i, "\r", j)]]; if (is.null(v)) numeric(0) else unique(v) }
   evall<-list()
   tt<-list()
-  basis<-create.bspline.basis(nbasis=n.b,rangeval = c(range.min,range.max))
   for (i in 1:samples) {
-    tt[[i]]<-lapply(1:no.f,function(j){tt[[i]]<-unique(data$.t[data$.id==i&data$.ind==j])})
-    evall[[i]]<-lapply(1:no.f, function(j){evall[[i]]<-t(eval.basis(unique(data$.t[data$.id==i&data$.ind==j]),basis))})
-  } 
+    tpts <- lapply(1:no.f, function(j) tp(i, j))
+    M[[i]]    <- sapply(tpts, length)
+    tt[[i]]   <- tpts
+    evall[[i]]<- lapply(tpts, function(v) t(eval.basis(v, basis)))
+  }
   m$time.no<-M
   m$eval<-evall
   m$time.point<-tt
@@ -220,7 +225,7 @@ diag.matrix<-function(model,n.b){
       if(length(model$var$observed)>0){
         a1<-model$var$observed%in%model$mod$regression[[j]]$covariate
         for (k in 1:length(a1)) {
-          if(a1[k]&model$mod$regression[[j]]$effect[which(model$mod$regression[[j]]$covariate==model$var$observed[k])]=="linear"){
+          if(isTRUE(a1[k])&&model$mod$regression[[j]]$effect[which(model$mod$regression[[j]]$covariate==model$var$observed[k])]=="linear"){
             d1<-Matrix::bdiag(d1,a1[k])  
           }else{
             d1<-Matrix::bdiag(d1,a1[k]*diag(n.b))
@@ -570,7 +575,8 @@ eta.distribution<-function(model,param,n.b,range.min,range.max,data,x.data=NULL,
         x.data13<-c(x.data13,x.data12[[is]]) 
       }
       r.x1<-soll%*%r.x1[,-1]
-      upsilon<-rbind(upsilon,kronecker(diag(samples),(r.x1%*%diagMatrix[[paste0("r",i,".x")]]))%*%x.data13)
+      ## full-sample kronecker(diag(samples),...) build removed: it fed only the
+      ## dead extra$eta$mean/covariance. Per-subject upsilon2 is kept below.
       for (is in 1:samples) {
         upsilon2[[is]]<-rbind(upsilon2[[is]],(r.x1%*%diagMatrix[[paste0("r",i,".x")]]%*%x.data12[[is]]))
       }
@@ -578,41 +584,31 @@ eta.distribution<-function(model,param,n.b,range.min,range.max,data,x.data=NULL,
     }else{
       extra$mu.cov[[ii]]<-0
     }
-    b<-rbind(b,kronecker(diag(samples),(r.eta%*%diagMatrix[[paste0("r",i,".eta")]])))
+    ## full-sample b/covv kronecker builds removed (fed only dead big mean/cov);
+    ## per-subject b2 and covv.2 are retained for the per-subject E-step.
     b2<-rbind(b2,(r.eta%*%diagMatrix[[paste0("r",i,".eta")]]))
-    d.eta<-weightMatrix$eta
     sig.lm<-param$sigma.sem[[count]] #the matrix sigma in sem
-    cov.u<-kronecker(diag(samples),sig.lm)
     cov.u2<-sig.lm
-    covv<-Matrix::bdiag(covv,cov.u)
     covv.2<-Matrix::bdiag(covv.2,cov.u2)
   }
   
   if(length(obs2)>0){
-    upsilon<-upsilon[-1,]
     for (is in 1:samples) {
       upsilon2[[is]]<-upsilon2[[is]][-1,]
     }
-    uu<-upsilon
     uu.2<-upsilon2
-    uu2<-uu
   }
-  b<-b[-1,]
-  be<-b%*%d.eta
-  bb<-be
-  covv1<-covv[-1,-1] #the covariance of zeta in eta=...+zeta
-  
-  covv2<-covv1
-  bb2<-bb
   un<-length(unique(model$var$latents))
   n<-n.b*un*samples
   n2<-n.b*un
-  sol<-solve(diag(n)-bb2)
   sol2<-solve(diag(n2)-b2[-1,])
-  mu.eta<-if(length(obs2)>0){sol%*%uu2}else{rep(0,n)} 
-  cov.eta<-sol%*%covv2%*%t(sol)
-  extra$eta$mean<-as.vector(mu.eta)
-  extra$eta$covariance<-as.matrix(cov.eta)
+  ## NOTE: the full (n.b * q * samples)-dimensional mean and covariance below
+  ## are never consumed downstream -- params.z1() uses only the per-subject
+  ## extra$mu.eta[[i]] and the per-subject extra$cov.eta (both built from sol2).
+  ## Forming the dense (I - B)^{-1} of dimension n.b*q*samples is an O(N^3)
+  ## operation that dominates the E-step for large N, so it is skipped here.
+  extra$eta$mean<-NULL
+  extra$eta$covariance<-NULL
   extra$mu.eta<-list()
   for (i in 1:samples) {
     extra$mu.eta[[i]]<-if(length(obs2)>0){sol2%*%uu.2[[i]]}else{rep(0,n2)}
@@ -747,8 +743,12 @@ params.z1<-function(model,param,n.b,range.min,range.max,eta.dist,data,omegaMatri
 }
 
 
-params.z<-function(model,param,n.b,sample.no,w,range.min,range.max,data){
-  eval.t<-timeEval(n.b,range.min,range.max,data)
+params.z<-function(model,param,n.b,sample.no,w,range.min,range.max,data,eval.t=NULL){
+  ## eval.t depends only on (n.b,range.min,range.max,data) and is constant
+  ## across the EM iterations and across subjects, so the caller may pass a
+  ## precomputed value to avoid an O(N^2)-per-call timeEval inside the
+  ## per-subject E-step loop (which made the loop O(N^3)).
+  if(is.null(eval.t)) eval.t<-timeEval(n.b,range.min,range.max,data)
   i<-sample.no
   no.f<-length(model$mod$factorModel)
   fr<-no.f
