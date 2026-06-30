@@ -79,7 +79,7 @@ for (i in 1:n.sim) { # use parallel computing if possible
  }
 }
 
-#extracting MSE values
+#Table 1: extracting MSE values
 source("Core/MSE_tab1.R")
 print(tabl.fac)
 print(tabl.sem)
@@ -90,7 +90,7 @@ source("Core/CovRate_tab2.R")
 print(cov.table.fac)
 print(cov.table.sem)
 
-#Table 3:regular missing at random design for N=100 and M=8
+#Table S1:regular missing at random design for N=100 and M=8
 ##fitting procedure
 ###set n.sim (number of monte carlo simulations)
 results<-list()
@@ -115,13 +115,12 @@ for (i in 1:n.sim) { # use parallel computing if possible
   results[[i]]<-list(simulation=simm,model.fit=model.fit,model.sim=model.sim,estimation=params.estimated)
 }
 
-#extracting MSE values
+#extracting MSE values for Table S1:
 source("Core/MSE_tab3.R")
 print(tabl.fac)
 print(tabl.sem)
 
-#Table 3:regular missing at random design for N=100 and M=8
-##extracting coverage rates
+##extracting coverage rates for Table S1:
 source("Core/CovRate_tab3.R")
 print(cov.table.fac)
 print(cov.table.sem)

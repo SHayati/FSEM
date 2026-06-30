@@ -1,0 +1,10 @@
+setwd("C:/Users/shaya/Documents/VSCode/FSEM/FSEM")
+options(width=200)
+r <- readRDS("outputs/result_parameter_set1_regular_1_N_50_M_10.rds")
+cat("estimated totparam$sigma.error:\n"); print(unlist(r$estimation$result$params.estimated$totparam$sigma.error))
+cat("\norg sigma.error:\n"); print(unlist(r$simulation$params.org.eval$sigma.error))
+cat("\norg sigma.error.std:\n"); print(unlist(r$simulation$params.org.eval$sigma.error.std))
+cat("\nest params.estimated names:\n"); print(names(r$estimation$result$params.estimated))
+cat("\nest totparam names:\n"); print(names(r$estimation$result$params.estimated$totparam))
+# is there a sigma.error.std in estimated?
+cat("\nest totparam sigma.error.std?\n"); print(r$estimation$result$params.estimated$totparam$sigma.error.std)

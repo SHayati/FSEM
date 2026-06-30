@@ -1,0 +1,49 @@
+total files: 800 
+  50/800  (0.1 min)
+  100/800  (0.3 min)
+  150/800  (0.4 min)
+  200/800  (0.6 min)
+  250/800  (0.7 min)
+  300/800  (0.8 min)
+  350/800  (0.9 min)
+  400/800  (1.1 min)
+  450/800  (1.2 min)
+  500/800  (1.4 min)
+  550/800  (1.5 min)
+  600/800  (1.6 min)
+  650/800  (1.8 min)
+  700/800  (1.9 min)
+  750/800  (2.1 min)
+  800/800  (2.2 min)
+
+================ TABLE 1 MSE RESULTS ================
+
+#### design: regular ####
+FM(1) N= 50 M=10 (n=100): beta=0.0466 lambda=0.0271 phi=0.0070 nu=0.0616 sigma=0.00015
+FM(2) N= 50 M=10 (n=100): beta=0.0419 lambda=0.0322 phi=0.0196 nu=0.0492 sigma=0.03563
+FM(3) N= 50 M=10 (n=100): beta=0.0250 lambda=0.0923 phi=0.0029 nu=0.0402 sigma=0.34060
+FM(1) N= 50 M=20 (n=100): beta=0.0482 lambda=0.0267 phi=0.0059 nu=0.0685 sigma=0.00009
+FM(2) N= 50 M=20 (n=100): beta=0.0471 lambda=0.0300 phi=0.0167 nu=0.0364 sigma=0.02315
+FM(3) N= 50 M=20 (n=100): beta=0.0262 lambda=0.0904 phi=0.0018 nu=0.0410 sigma=0.19453
+FM(1) N=100 M=10 (n=100): beta=0.0339 lambda=0.0142 phi=0.0033 nu=0.0363 sigma=0.00010
+FM(2) N=100 M=10 (n=100): beta=0.0279 lambda=0.0214 phi=0.0074 nu=0.0271 sigma=0.03595
+FM(3) N=100 M=10 (n=100): beta=0.0141 lambda=0.0840 phi=0.0016 nu=0.0273 sigma=0.34451
+FM(1) N=100 M=20 (n=100): beta=0.0246 lambda=0.0129 phi=0.0026 nu=0.0296 sigma=0.00008
+FM(2) N=100 M=20 (n=100): beta=0.0216 lambda=0.0154 phi=0.0083 nu=0.0203 sigma=0.02419
+FM(3) N=100 M=20 (n=100): beta=0.0134 lambda=0.0752 phi=0.0008 nu=0.0211 sigma=0.19720
+
+#### design: irregular ####
+FM(1) N= 50 M=10 (n=100): beta=0.0634 lambda=0.0457 phi=0.0105 nu=0.0742 sigma=0.00006
+FM(2) N= 50 M=10 (n=100): beta=0.0527 lambda=0.0412 phi=0.0296 nu=0.0536 sigma=0.00803
+FM(3) N= 50 M=10 (n=100): beta=0.0328 lambda=0.1569 phi=0.0168 nu=0.0522 sigma=0.09994
+FM(1) N= 50 M=20 (n=100): beta=0.0545 lambda=0.0259 phi=0.0067 nu=0.0740 sigma=0.00004
+FM(2) N= 50 M=20 (n=100): beta=0.0524 lambda=0.0291 phi=0.0156 nu=0.0439 sigma=0.01242
+FM(3) N= 50 M=20 (n=100): beta=0.0261 lambda=0.1024 phi=0.0092 nu=0.0450 sigma=0.11496
+FM(1) N=100 M=10 (n=100): beta=0.0342 lambda=0.0221 phi=0.0054 nu=0.0378 sigma=0.00003
+FM(2) N=100 M=10 (n=100): beta=0.0319 lambda=0.0203 phi=0.0110 nu=0.0268 sigma=0.00944
+FM(3) N=100 M=10 (n=100): beta=0.0193 lambda=0.1182 phi=0.0081 nu=0.0253 sigma=0.10228
+FM(1) N=100 M=20 (n=100): beta=0.0304 lambda=0.0139 phi=0.0028 nu=0.0288 sigma=0.00003
+FM(2) N=100 M=20 (n=100): beta=0.0261 lambda=0.0146 phi=0.0100 nu=0.0206 sigma=0.01298
+FM(3) N=100 M=20 (n=100): beta=0.0144 lambda=0.0901 phi=0.0043 nu=0.0240 sigma=0.12250
+
+DONE. total time: 2.2 min
